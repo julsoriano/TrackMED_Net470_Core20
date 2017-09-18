@@ -1,0 +1,95 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\ManageController.cs" />
+    <Compile Remove="Services\Util.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.6.1" />
+    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
+    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />
+    <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Tools" Version="2.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\ActivityType\Create.cshtml" />
+    <None Include="Views\ActivityType\Delete.cshtml" />
+    <None Include="Views\ActivityType\Details.cshtml" />
+    <None Include="Views\ActivityType\Edit.cshtml" />
+    <None Include="Views\ActivityType\Index.cshtml" />
+    <None Include="Views\Component\Create.cshtml" />
+    <None Include="Views\Component\Delete.cshtml" />
+    <None Include="Views\Component\Details.cshtml" />
+    <None Include="Views\Component\Edit.cshtml" />
+    <None Include="Views\Component\Index Original.cshtml" />
+    <None Include="Views\Component\Index.cshtml" />
+    <None Include="Views\Description\Create - Original.cshtml" />
+    <None Include="Views\Description\Create Partial.cshtml" />
+    <None Include="Views\Description\Create.cshtml" />
+    <None Include="Views\Description\Delete.cshtml" />
+    <None Include="Views\Description\Details.cshtml" />
+    <None Include="Views\Description\Edit Partial.cshtml" />
+    <None Include="Views\Description\Edit.cshtml" />
+    <None Include="Views\Description\Index - Working Copy %28No DT%29.cshtml" />
+    <None Include="Views\Description\Index jQuery Dialog.cshtml" />
+    <None Include="Views\Description\Index.cshtml" />
+    <None Include="Views\Description\_CreateOrEdit.cshtml" />
+    <None Include="Views\Home\About.cshtml" />
+    <None Include="Views\Home\Contact.cshtml" />
+    <None Include="Views\Home\Index.cshtml" />
+    <None Include="Views\Location\Create.cshtml" />
+    <None Include="Views\Location\Delete.cshtml" />
+    <None Include="Views\Location\Details.cshtml" />
+    <None Include="Views\Location\Edit.cshtml" />
+    <None Include="Views\Location\Index.cshtml" />
+    <None Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <None Include="Views\Manage\ChangePassword.cshtml" />
+    <None Include="Views\Manage\Index.cshtml" />
+    <None Include="Views\Manage\ManageLogins.cshtml" />
+    <None Include="Views\Manage\SetPassword.cshtml" />
+    <None Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <None Include="Views\Model_Manufacturer\Create.cshtml" />
+    <None Include="Views\Model_Manufacturer\Delete.cshtml" />
+    <None Include="Views\Model_Manufacturer\Details.cshtml" />
+    <None Include="Views\Model_Manufacturer\Edit.cshtml" />
+    <None Include="Views\Model_Manufacturer\Index.cshtml" />
+    <None Include="Views\Owner\Create.cshtml" />
+    <None Include="Views\Owner\Delete.cshtml" />
+    <None Include="Views\Owner\Details.cshtml" />
+    <None Include="Views\Owner\Edit.cshtml" />
+    <None Include="Views\Owner\Index - Working Copy %28No DT%29.cshtml" />
+    <None Include="Views\Owner\Index.cshtml" />
+    <None Include="Views\ProviderOfService\Create.cshtml" />
+    <None Include="Views\ProviderOfService\Delete.cshtml" />
+    <None Include="Views\ProviderOfService\Details.cshtml" />
+    <None Include="Views\ProviderOfService\Edit.cshtml" />
+    <None Include="Views\ProviderOfService\Index.cshtml" />
+    <None Include="Views\Status\Create.cshtml" />
+    <None Include="Views\Status\Delete.cshtml" />
+    <None Include="Views\Status\Details.cshtml" />
+    <None Include="Views\Status\Edit.cshtml" />
+    <None Include="Views\Status\Index.cshtml" />
+    <None Include="Views\SystemsDescription\Create.cshtml" />
+    <None Include="Views\SystemsDescription\Delete.cshtml" />
+    <None Include="Views\SystemsDescription\Details.cshtml" />
+    <None Include="Views\SystemsDescription\Edit.cshtml" />
+    <None Include="Views\SystemsDescription\Index.cshtml" />
+    <None Include="Views\SystemTab\Create.cshtml" />
+    <None Include="Views\SystemTab\Delete.cshtml" />
+    <None Include="Views\SystemTab\Details.cshtml" />
+    <None Include="Views\SystemTab\Edit.cshtml" />
+    <None Include="Views\SystemTab\Index.cshtml" />
+    <None Include="wwwroot\js\plugins\dataTables\dataTables.bootstrap.js" />
+    <None Include="wwwroot\js\plugins\dataTables\jquery.dataTables.js" />
+  </ItemGroup>
+
+</Project>
