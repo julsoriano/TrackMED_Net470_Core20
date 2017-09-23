@@ -5,15 +5,32 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Manage\**" />
+    <Content Remove="Views\Manage\**" />
+    <EmbeddedResource Remove="Views\Manage\**" />
+    <None Remove="Views\Manage\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="Controllers\ManageController.cs" />
     <Compile Remove="Services\Util.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Description\Index - Working Copy %28No DT%29.cshtml" />
+    <Content Remove="Views\Owner\Index - Working Copy %28No DT%29.cshtml" />
+    <Content Remove="Views\Shared\_Layout w Sidebar - Core 1.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="4.6.1" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.0" />
-    <PackageReference Include="Microsoft.Office.Interop.Excel" Version="15.0.4795.1000" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+    <PackageReference Include="Serilog" Version="2.5.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="2.0.2" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="2.4.0" />
+    <PackageReference Include="Serilog.Sinks.Email" Version="2.3.0" />
+    <PackageReference Include="Serilog.Sinks.MongoDB" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,7 +56,6 @@
     <None Include="Views\Description\Details.cshtml" />
     <None Include="Views\Description\Edit Partial.cshtml" />
     <None Include="Views\Description\Edit.cshtml" />
-    <None Include="Views\Description\Index - Working Copy %28No DT%29.cshtml" />
     <None Include="Views\Description\Index jQuery Dialog.cshtml" />
     <None Include="Views\Description\Index.cshtml" />
     <None Include="Views\Description\_CreateOrEdit.cshtml" />
@@ -51,12 +67,6 @@
     <None Include="Views\Location\Details.cshtml" />
     <None Include="Views\Location\Edit.cshtml" />
     <None Include="Views\Location\Index.cshtml" />
-    <None Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <None Include="Views\Manage\ChangePassword.cshtml" />
-    <None Include="Views\Manage\Index.cshtml" />
-    <None Include="Views\Manage\ManageLogins.cshtml" />
-    <None Include="Views\Manage\SetPassword.cshtml" />
-    <None Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <None Include="Views\Model_Manufacturer\Create.cshtml" />
     <None Include="Views\Model_Manufacturer\Delete.cshtml" />
     <None Include="Views\Model_Manufacturer\Details.cshtml" />
@@ -66,7 +76,6 @@
     <None Include="Views\Owner\Delete.cshtml" />
     <None Include="Views\Owner\Details.cshtml" />
     <None Include="Views\Owner\Edit.cshtml" />
-    <None Include="Views\Owner\Index - Working Copy %28No DT%29.cshtml" />
     <None Include="Views\Owner\Index.cshtml" />
     <None Include="Views\ProviderOfService\Create.cshtml" />
     <None Include="Views\ProviderOfService\Delete.cshtml" />

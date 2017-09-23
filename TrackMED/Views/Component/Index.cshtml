@@ -74,7 +74,7 @@
                             @Html.ActionLink(Convert.ToString(@Html.DisplayNameFor(model => model.Model_Manufacturer.Desc)), "", new { selectcomponents = ViewBag.CurrentOptions })
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1">
-                            @Html.ActionLink(Convert.ToString(@Html.DisplayNameFor(model => model.ServiceProvider.Desc)), "", new { selectcomponents = ViewBag.CurrentOptions })
+                            @Html.ActionLink(Convert.ToString(@Html.DisplayNameFor(model => model.ProviderOfService.Desc)), "", new { selectcomponents = ViewBag.CurrentOptions })
                         </th>
                         <th class="sorting" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1">
                             @Html.ActionLink(Convert.ToString(@Html.DisplayNameFor(model => model.CalibrationDate)), "", new { selectcomponents = ViewBag.CurrentOptions })
@@ -99,7 +99,7 @@
                             <td>@Html.DisplayFor(modelItem => item.Owner.Desc)</td>
                             <td>@Html.DisplayFor(modelItem => item.Status.Desc)</td>
                             <td>@Html.DisplayFor(modelItem => item.Model_Manufacturer.Desc)</td>
-                            <td>@Html.DisplayFor(modelItem => item.ServiceProvider.Desc)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ProviderOfService.Desc)</td>
                             <td>@Html.DisplayFor(modelItem => item.CalibrationDate)</td>
                             <td>@Html.DisplayFor(modelItem => item.MaintenanceDate)</td>
                             <td>

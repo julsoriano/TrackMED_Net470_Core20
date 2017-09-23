@@ -56,10 +56,10 @@
             </div>
         </div>
         <div class="form-group">
-            <label asp-for="ServiceProvider" class="col-md-2 control-label"></label>
+            <label asp-for="ProviderOfService" class="col-md-2 control-label"></label>
             <div class="col-md-10">
-                @Html.DropDownList("ServiceProviderID", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
-                <span asp-validation-for="ServiceProviderID" class="text-danger" />
+                @Html.DropDownList("ProviderOfService", null, htmlAttributes: new { @class = "form-control", @readonly = "readonly" })
+                <span asp-validation-for="ProviderOfService" class="text-danger" />
             </div>
         </div>
         <div class="form-group">

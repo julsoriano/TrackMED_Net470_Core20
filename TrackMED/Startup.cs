@@ -2,28 +2,76 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.Email;
+
+using System.Net;
 
 //using TrackMED.Data;
 using TrackMED.Models;
 using TrackMED.Services;
+using WilderBlog.Logger;
+using WilderBlog.Services;
 
 namespace TrackMED
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IHostingEnvironment env)
         {
             var builder = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true);
 
+            if (env.IsDevelopment())
+            {
+                // For more details on using the user secret store see http://go.microsoft.com/fwlink/?LinkID=532709
+                //builder.AddUserSecrets();
+            }
+
             builder.AddEnvironmentVariables();
             Configuration = builder.Build();
-            //Configuration = configuration;
+
+            
+            EmailConnectionInfo info = new EmailConnectionInfo()
+            {
+                EmailSubject = "Test Serilog",
+                ToEmail = "jul_soriano@yahoo.com",
+
+                /*
+                FromEmail = "elijahpne@gmail.com",
+                MailServer = "smtp.gmail.com", // "smtp.live.com"
+                NetworkCredentials = new NetworkCredential("elijahpne@gmail.com", "Proverb16:6"),
+                Port = 587,
+                */
+
+                FromEmail = "jul_soriano@hotmail.com",
+                MailServer = "smtp.live.com", // "smtp.live.com"
+                NetworkCredentials = new NetworkCredential("jul_soriano@hotmail.com", "acts15:23hot"),
+                Port = 465,
+            };
+            
+
+            // Or This: See https://github.com/serilog/serilog/wiki/Getting-Started
+            var uriMongoDB = Configuration.GetValue<string>("MongoSettings:mongoconnection");
+
+            // http://sourcebrowser.io/Browse/serilog/serilog/src/Serilog.Sinks.Email/LoggerConfigurationEmailExtensions.cs
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Warning()
+                //.WriteTo.LiterateConsole()
+                //.WriteTo.RollingFile("logs\\trackmed-{Date}.txt")
+                .WriteTo.Email(info, restrictedToMinimumLevel: LogEventLevel.Warning)   // https://github.com/serilog/serilog/wiki/Configuration-Basics#overriding-per-sink
+                //.WriteTo.Seq("http://localhost:5341/")
+                .WriteTo.MongoDBCapped(uriMongoDB, collectionName: "logsTrackMED")  // https://github.com/serilog/serilog-sinks-mongodb
+                .CreateLogger();
+
+            Log.Error("Houston we have a problem");
         }
 
-        public IConfiguration Configuration { get; }
+        public IConfigurationRoot Configuration { get; set; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -34,11 +82,9 @@ namespace TrackMED
             // See http://stackoverflow.com/questions/36893326/read-a-value-from-appsettings-json-in-1-0-0-rc1-final
             services.Configure<Settings>(Configuration.GetSection("MongoSettings"));
 
-
             // Add application services.
             services.AddTransient<IEmailSender, AuthMessageSender>();
             services.AddTransient<ISmsSender, AuthMessageSender>();
-
 
             // Add model services
             services.AddSingleton<IEntityService<ActivityType>, EntityService<ActivityType>>();
@@ -108,8 +154,14 @@ namespace TrackMED
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
+            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            loggerFactory.AddDebug();
+            //loggerFactory.AddEmail(, LogLevel.Critical);
+
+            // See https://www.towfeek.se/2016/06/structured-logging-with-aspnet-core-using-serilog-and-seq/
+            loggerFactory.AddSerilog();     // requires Serilog.Extensions,Logging
 
             if (env.IsDevelopment())
             {
@@ -122,23 +174,13 @@ namespace TrackMED
             }
 
             app.UseStaticFiles();
-
-            
+           
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            
-
-            // changed
-            /*app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Status}/{action=Index}/{id?}");
-            }); */
         }
     }
 }

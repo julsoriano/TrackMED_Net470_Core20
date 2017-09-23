@@ -99,6 +99,9 @@ namespace TrackMED.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(string selectcomponents)
         {
+            _logger.LogInformation("Inside Components Controller: Just information");
+            _logger.LogWarning("Inside Components Controller: Warning message");
+
             IList<SelectListItem> items = new List<SelectListItem>
             {
                 new SelectListItem{Text = "All", Value = "0"},

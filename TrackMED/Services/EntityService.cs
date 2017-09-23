@@ -42,33 +42,6 @@ namespace TrackMED.Services
             }
         }
 
-        /*
-        public async Task<T> GetEntityAsyncByOtherThanId(string OtherThanId,
-            CancellationToken cancelToken = default(CancellationToken))
-        {
-            // String.IndexOfAny Method https://msdn.microsoft.com/en-us/library/11w09h50(v=vs.110).aspx
-            char[] chars = { '&', '/', '%', '$' };
-            //int indexSlash = OtherThanId.IndexOf("/");
-            int indexSpecial = OtherThanId.IndexOfAny(chars);
-            if (indexSpecial >= 0)
-            {
-                // http://stackoverflow.com/questions/24978885/asp-c-special-characters-cant-pass-trough-url-parameter
-                OtherThanId = Uri.EscapeDataString(OtherThanId);
-            }
-
-            uri = getServiceUri(typeof(T).Name + "/OtherThanId/" + OtherThanId);
-            using (HttpClient httpClient = new HttpClient()) 
-            {
-                var response = await httpClient.GetAsync(uri, cancelToken);
-                //return (await response.Content.ReadAsAsync<T>());
-
-                var dataString = response.Content.ReadAsStringAsync().Result;
-                T obj = JsonConvert.DeserializeObject<T>(dataString);
-                return obj;
-            }
-        }
-        */
-
         public async Task<List<T>> GetEntitiesManyAsync(List<string> ids, CancellationToken cancelToken = default(CancellationToken))
         {
             uri = getServiceUri(typeof(T).Name + "/multiples" + "/" + ids);
@@ -224,10 +197,6 @@ namespace TrackMED.Services
             uri = getServiceUri(typeof(T).Name);
             using (HttpClient httpClient = new HttpClient())
             {
-                // old code
-                // var response = await httpClient.PostAsJsonAsync(uri, Entity);
-                // return (await response.Content.ReadAsAsync<T>());
-
                 string json = JsonConvert.SerializeObject(Entity, Formatting.Indented);
                 HttpContent httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await httpClient.PostAsync(uri, httpContent, cancelToken);
@@ -244,10 +213,6 @@ namespace TrackMED.Services
             uri = getServiceUri(typeof(T).Name + "/multiples/" + Entities);
             using (HttpClient httpClient = new HttpClient())
             {
-                // old code
-                // var response = await httpClient.PostAsJsonAsync(uri, Entities);
-                // return (await response.Content.ReadAsAsync<T>());
-
                 string json = JsonConvert.SerializeObject(Entities, Formatting.Indented);
                 HttpContent httpContent = new StringContent(json, Encoding.UTF8, "application/json");
                 var response = await httpClient.PostAsync(uri, httpContent, cancelToken);
@@ -264,7 +229,6 @@ namespace TrackMED.Services
             using (HttpClient httpClient = new HttpClient())
             {
                 var response = await httpClient.GetAsync(uri, cancelToken);
-                //return (await response.Content.ReadAsAsync<T>());
 
                 var dataString = response.Content.ReadAsStringAsync().Result;
                 T obj = JsonConvert.DeserializeObject<T>(dataString);
