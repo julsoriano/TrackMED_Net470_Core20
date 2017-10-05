@@ -32,7 +32,10 @@ namespace TrackMED.Models
         [JsonProperty(PropertyName = "location")]
         public virtual Location Location { get; set; }
 
-        public List<string> leftComponents { get; set; }
-        public List<string> rightComponents { get; set; }
+        [JsonProperty(PropertyName = "leftComponents")]
+        public List<string> LeftComponents { get; set; }
+
+        [JsonProperty(PropertyName = "rightComponents")]
+        public List<string> RightComponents { get; set; }
     }
 }

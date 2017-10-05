@@ -114,10 +114,10 @@ function deleteConfirmed(removethis, tableName, bgColor, color) {
                     break;
 
                 default:
-                    alert(xhr.status + ": " + xhr.statusText) ;
+                    alert(xhr.status + ": " + xhr.statusText);
                     break;
             }
-        };
+        }
 
         // possible values for the second argument (besides null) are "timeout", "error", "abort", and "parsererror". 
         if(textStatus !== null) alert("Error Status: " + textStatus);

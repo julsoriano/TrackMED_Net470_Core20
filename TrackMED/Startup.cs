@@ -51,7 +51,7 @@ namespace TrackMED
                 FromEmail = "jul_soriano@hotmail.com",
                 MailServer = "smtp.live.com", // "smtp.live.com"
                 NetworkCredentials = new NetworkCredential("jul_soriano@hotmail.com", "acts15:23hot"),
-                Port = 465,
+                Port = 587, // 465
             };
             
 
@@ -68,7 +68,7 @@ namespace TrackMED
                 .WriteTo.MongoDBCapped(uriMongoDB, collectionName: "logsTrackMED")  // https://github.com/serilog/serilog-sinks-mongodb
                 .CreateLogger();
 
-            Log.Error("Houston we have a problem");
+            Log.Warning("Houston we have a problem");
         }
 
         public IConfigurationRoot Configuration { get; set; }

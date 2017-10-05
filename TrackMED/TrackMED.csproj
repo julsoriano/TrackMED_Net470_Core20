@@ -5,9 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Extensions\**" />
     <Compile Remove="Views\Manage\**" />
+    <Content Remove="Extensions\**" />
     <Content Remove="Views\Manage\**" />
+    <EmbeddedResource Remove="Extensions\**" />
     <EmbeddedResource Remove="Views\Manage\**" />
+    <None Remove="Extensions\**" />
     <None Remove="Views\Manage\**" />
   </ItemGroup>
 
@@ -20,6 +24,10 @@
     <Content Remove="Views\Description\Index - Working Copy %28No DT%29.cshtml" />
     <Content Remove="Views\Owner\Index - Working Copy %28No DT%29.cshtml" />
     <Content Remove="Views\Shared\_Layout w Sidebar - Core 1.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Properties\PublishProfiles\TrackMED - Web Deploy.pubxml" />
   </ItemGroup>
 
   <ItemGroup>
@@ -99,6 +107,10 @@
     <None Include="Views\SystemTab\Index.cshtml" />
     <None Include="wwwroot\js\plugins\dataTables\dataTables.bootstrap.js" />
     <None Include="wwwroot\js\plugins\dataTables\jquery.dataTables.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
 
 </Project>

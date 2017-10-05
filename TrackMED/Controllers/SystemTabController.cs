@@ -117,18 +117,18 @@ namespace TrackMED.Controllers
             }
 
             List<Component> leftComponents = new List<Component>();
-            if (systemTab.leftComponents != null) {
-                leftComponents = PopulateLeftRightComponents(systemTab.leftComponents).Result;
+            if (systemTab.LeftComponents != null) {
+                leftComponents = PopulateLeftRightComponents(systemTab.LeftComponents).Result;
             }
 
             List<Component> rightComponents = new List<Component>();
-            if (systemTab.rightComponents != null)
+            if (systemTab.RightComponents != null)
             {
-                rightComponents = PopulateLeftRightComponents(systemTab.rightComponents).Result;
+                rightComponents = PopulateLeftRightComponents(systemTab.RightComponents).Result;
             }
 
-            var countLeft = systemTab.leftComponents.Count;
-            var countRight = systemTab.rightComponents.Count;
+            var countLeft = systemTab.LeftComponents != null ? systemTab.LeftComponents.Count : 0;
+            var countRight = systemTab.RightComponents != null ? systemTab.RightComponents.Count : 0;
 
             if (countLeft > countRight)
             {
@@ -219,8 +219,8 @@ namespace TrackMED.Controllers
                     systemTab.ReferenceNo = !String.IsNullOrEmpty(systemTab.ReferenceNo) ? systemTab.ReferenceNo : String.Empty;
                     systemTab.Status = statusRecord;
                     systemTab.StatusID = statusID;
-                    systemTab.leftComponents = leftComponents;
-                    systemTab.rightComponents = rightComponents;
+                    systemTab.LeftComponents = leftComponents;
+                    systemTab.RightComponents = rightComponents;
                     systemTab.DeploymentDate = (typeSubmit == "Deploy") ? DateTime.Now : (DateTime?)null;
                     systemTab.CreatedAtUtc = DateTime.Now;
                     await _entityService.PostEntityAsync(systemTab);
@@ -349,8 +349,8 @@ namespace TrackMED.Controllers
             ViewBag.leftComponents = null;
             ViewBag.rightComponents = null;
 
-            List<string> leftIMTEs = systemTab.leftComponents;
-            List<string> rightIMTEs = systemTab.rightComponents;
+            List<string> leftIMTEs = systemTab.LeftComponents;
+            List<string> rightIMTEs = systemTab.RightComponents;
             
             List<Component> leftComponents = new List<Component>();
             List<Component> rightComponents = new List<Component>();
@@ -445,8 +445,8 @@ namespace TrackMED.Controllers
             if (id == null) return;
 
             // Remove "PENDING" from imteModule
-            if (recordToUpdate.leftComponents != null) CleanUpComponents(recordToUpdate.leftComponents);
-            if (recordToUpdate.rightComponents != null) CleanUpComponents(recordToUpdate.rightComponents);
+            if (recordToUpdate.LeftComponents != null) CleanUpComponents(recordToUpdate.LeftComponents);
+            if (recordToUpdate.RightComponents != null) CleanUpComponents(recordToUpdate.RightComponents);
 
             return;
         }
@@ -457,10 +457,10 @@ namespace TrackMED.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(string id, 
-                                        [Bind("Id, imte, serialnumber, SystemsDescriptionID, OwnerID, FixtureCode, ModuleCode, Notes, leftComponents, rightComponents")]
+                                        [Bind("Id, imte, serialnumber, SystemsDescriptionID, OwnerID, FixtureCode, ModuleCode, Notes, LeftComponents, RightComponents")]
                                         SystemTab systemTab, string[] selectedIMTEs, string typeSubmit)
         {
-            string[] fieldsToBind = new string[] { "Id", "imte", "serialnumber", "SystemsDescriptionID", "OwnerID", "FixtureCode", "ModuleCode", "Notes", "leftComponents", "rightComponents" };
+            string[] fieldsToBind = new string[] { "Id", "imte", "serialnumber", "SystemsDescriptionID", "OwnerID", "FixtureCode", "ModuleCode", "Notes", "LeftComponents", "RightComponents" };
 
             if (id == null)
             {
@@ -488,8 +488,8 @@ namespace TrackMED.Controllers
                 }
             }
                  
-            if (recordToUpdate.leftComponents != null) {
-                foreach (String s in recordToUpdate.leftComponents)
+            if (recordToUpdate.LeftComponents != null) {
+                foreach (String s in recordToUpdate.LeftComponents)
                 {
                     if(FindImte(s, selectedIMTEsLeft)) continue;
                     Component comp = await _componentService.GetEntityAsync(s);
@@ -498,9 +498,9 @@ namespace TrackMED.Controllers
                 };
             }
 
-            if (recordToUpdate.rightComponents != null)
+            if (recordToUpdate.RightComponents != null)
             {
-                foreach (String s in recordToUpdate.rightComponents)
+                foreach (String s in recordToUpdate.RightComponents)
                 {
                     if (FindImte(s, selectedIMTEsRight)) continue;
                     Component comp = await _componentService.GetEntityAsync(s);
@@ -542,8 +542,8 @@ namespace TrackMED.Controllers
                     await _componentService.EditEntityAsync(recComponent);
                 }
 
-                systemTab.leftComponents = leftComponents;
-                systemTab.rightComponents = rightComponents;
+                systemTab.LeftComponents = leftComponents;
+                systemTab.RightComponents = rightComponents;
                 systemTab.CreatedAtUtc = DateTime.Now;
 
                 await _entityService.EditEntityAsync(systemTab);
@@ -569,19 +569,19 @@ namespace TrackMED.Controllers
             }
 
             List<Component> leftComponents = new List<Component>();
-            if (systemTab.leftComponents != null)
+            if (systemTab.LeftComponents != null)
             {
-                leftComponents = PopulateLeftRightComponents(systemTab.leftComponents).Result;
+                leftComponents = PopulateLeftRightComponents(systemTab.LeftComponents).Result;
             }
 
             List<Component> rightComponents = new List<Component>();
-            if (systemTab.rightComponents != null)
+            if (systemTab.RightComponents != null)
             {
-                rightComponents = PopulateLeftRightComponents(systemTab.rightComponents).Result;
+                rightComponents = PopulateLeftRightComponents(systemTab.RightComponents).Result;
             }
 
-            var countLeft = systemTab.leftComponents.Count;
-            var countRight = systemTab.rightComponents.Count;
+            var countLeft = systemTab.LeftComponents != null ? systemTab.LeftComponents.Count : 0;
+            var countRight = systemTab.RightComponents != null ? systemTab.RightComponents.Count : 0;
 
             if (countLeft > countRight)
             {
@@ -657,7 +657,7 @@ namespace TrackMED.Controllers
 
             try
             {
-                foreach (var lr in rectodelete.leftComponents)
+                foreach (var lr in rectodelete.LeftComponents)
                 {
                     var imteToUpdate = await _componentService.GetEntityAsync(lr);
                     imteToUpdate.imteModule = null;
@@ -667,7 +667,7 @@ namespace TrackMED.Controllers
                     await _componentService.EditEntityAsync(imteToUpdate);
                 }
 
-                foreach (var lr in rectodelete.rightComponents)
+                foreach (var lr in rectodelete.RightComponents)
                 {
                     var imteToUpdate = await _componentService.GetEntityAsync(lr);
                     imteToUpdate.imteModule = null;
