@@ -1,0 +1,151 @@
+﻿@model IEnumerable<TrackMED.Models.Description>
+
+@{
+    ViewBag.Title = "Index: Descriptions";
+}
+
+<!--
+<style type="text/css" class="init">
+
+    td.details-control {
+        background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+        background: url('https://datatables.net/examples/resources/details_close.png') no-repeat center center;
+    }
+
+</style>
+-->
+<!--
+/* Copyright 2014 Evernote Corporation. All rights reserved. */
+
+<style id="style-1-cropbar-clipper">
+
+    .en-markup-crop-options {
+        top: 18px !important;
+        left: 50% !important;
+        margin-left: -100px !important;
+        width: 200px !important;
+        border: 2px rgba(255,255,255,.38) solid !important;
+        border-radius: 4px !important;
+    }
+
+        .en-markup-crop-options div div:first-of-type {
+            margin-left: 0px !important;
+        }
+</style>
+-->
+<!--
+
+<style type="text/css">
+    #customForm {
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    #customForm fieldset {
+        flex: 1;
+        border: 1px solid #aaa;
+        margin: 0.5em;
+    }
+
+    #customForm fieldset legend {
+        padding: 5px 20px;
+        border: 1px solid #aaa;
+        font-weight: bold;
+    }
+
+    #customForm fieldset.name {
+        flex: 2 100%;
+    }
+
+    #customForm fieldset.name legend {
+        background: #bfffbf;
+    }
+
+    #customForm fieldset.office legend {
+        background: #ffffbf;
+    }
+
+    #customForm fieldset.hr legend {
+        background: #ffbfbf;
+    }
+
+    #customForm div.DTE_Field {
+        padding: 5px;
+    }
+</style>
+-->
+
+<h2>DESCRIPTIONS</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+
+<div id="example_wrapper" class="dataTables_wrapper form-inline dt-bootstrap no-footer">
+    
+    <div id="customForm">
+        <fieldset class="name">
+            <legend>Name</legend>
+            <editor-field name=@Html.DisplayNameFor(model => model.Desc)></editor-field>
+        </fieldset>
+        <fieldset class="office">
+            <legend>Office</legend>
+            <editor-field name=@Html.DisplayNameFor(model => model.Tag)></editor-field>
+        </fieldset>
+        <fieldset class="hr">
+            <legend>HR info</legend>
+            <editor-field name=@Html.DisplayNameFor(model => model.CreatedAtUtc)></editor-field>
+        </fieldset>
+    </div>
+    
+    <div class="row">
+        <table id="nestedTable" class="table-light table-striped table-condensed table-hover dataTable no-footer" cellspacing="0" width="100%" role="grid" aria-describedby="DataTables_Table_1_info" style="width: 100%;">
+            <thead>
+                <tr role="row">
+                    <th class="details-control sorting_disabled" rowspan="1" colspan="1" aria-label="" style="width: 9px;"></th>
+                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1">@Html.DisplayNameFor(model => model.Desc)</th>
+                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1">@Html.DisplayNameFor(model => model.Tag)</th>
+                    <th class="sorting" tabindex="0" aria-controls="DataTables_Table_1" rowspan="1" colspan="1">@Html.DisplayNameFor(model => model.CreatedAtUtc)</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="myTable">
+                @foreach (var item in Model)
+                {
+                    var tableName = " " + item.GetType();
+                    <tr role="row" rel="@item.Id@tableName">
+                        <td class="details-control glyphicon glyphicon-plus">
+                            <!-- <a href="#!" rel="item.Id" onclick="showComponents(this, 'Models')">+</a> -->
+                            <!-- <a asp-action="Index" asp-route-id="item.Id" >+</a> -->
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.Desc)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Tag)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreatedAtUtc)</td>
+
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@item.Id" class="editDialog">Edit</a> |
+                            <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> | -->
+                            <!-- <a asp-route-id="@item.Id" onclick="deleteRecord(this, 'Descriptions')" >Delete</a> -->
+                            <a href="#!" rel="@item.Id" onclick="deleteRecord(this, 'Descriptions')">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <div class="col-md-12 text-center">
+        <ul class="pagination pagination-lg pager" id="myPager"></ul>
+    </div>
+
+    <div id="dialog-confirm" title="Delete Record" style="display: none">
+        <p>
+            <span class="ui-icon ui-icon-alert" style="float: left; margin: 0 7px 20px 0;"></span>
+            Are you sure you want to delete this?
+        </p>
+    </div>

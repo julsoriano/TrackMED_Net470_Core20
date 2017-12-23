@@ -1,47 +1,189 @@
-﻿// Write your Javascript code.
+﻿
+// Section 1: CRUD ON VARIOUS TABLES USING MODAL FORMS
+// ADD RECORD
+    /*
+    $("#openDialog").on("click", function (e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        alert(url);
 
-/*
-    Function                    Function                                    Used in
-    -------------------------------------------------------------------------------------------------------
-    deleteRecord                                                            Index.cshtml of all controllers
-    deleteConfirmed                                                         ditto
-    showComponents                                                          ditto
-    formatThis              
-    jQuery.fn.pageme                                                        superceded by the paging functionality of DataTables
-    loadjscssfile
-    removejscssfile         
-    checkloadjscssfile
-    showComponentDDL                                                        Create and Edit of SystemTab
-    addIMTE                                                                 ditto
-    returnIMTE                                                              Edit of SystemTab
-*/
+        $("#dialog-edit").dialog({
+            title: 'Add Record',
+            autoOpen: false,
+            resizable: false,
+            height: 500,
+            width: 500,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                event.preventDefault();
+                $(this).load(url);
+            },
+            close: function (event, ui) {
+                $(this).dialog('close');
+            }
+        });
 
+        $("#dialog-edit").dialog('open');
+        return false;
+    });
+    */
+
+// EDIT RECORD
+function editRecord(editthis, tableName) {
+    // https://www.mindstick.com/Articles/1117/crud-operation-using-modal-dialog-in-asp-dot-net-mvc
+    alert("Inside Edit");
+    var val = $(editthis).attr('rel');      // or: var value = (editthis.id).substr(1);
+    alert(val);
+    var obj = JSON.parse(val);              // https://www.w3schools.com/js/js_json.asp and https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
+    var myDesc = obj.desc;
+    alert(myDesc);
+    // https://stackoverflow.com/questions/28701164/how-to-use-html-rawjson-encodemodel-properly
+
+    $(".modal-body #desc").val(myDesc);
+
+    $(".editDialog").on("click", function (e) {
+        e.preventDefault(); // added jss 09Aug'16
+        //var url = $(this).attr('href');
+
+        $("#dialog-edit").dialog({
+            title: 'Edit Record',
+            autoOpen: false,
+            resizable: false,
+            height: "auto",
+            width: 400,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            //open: function (event, ui) {
+            //$(this).load(url);
+
+            //},
+            //close: function (event, ui) {
+            //    $(this).dialog('close');
+            //},
+
+            buttons: {
+                Save: function () {
+                    event.preventDefault();
+                    var value = $(editthis).attr('rel');     // or: var value = (editthis.id).substr(1);
+                    // var value = $(editthis).attr('asp-route-id');
+                    
+                    var url = "/" + tableName + "/Edit";
+
+                    // Send the data using post. See https://api.jquery.com/jquery.post/
+                    var posting = $.put(url, { id: value, entity: editthis });
+                    /*  above is equivalent to:
+                        $.ajax({
+                          type: "PUT",
+                          url: url,
+                          data: { id: value, entity: editthis },
+                          success: success,
+                          dataType: dataType
+                        });
+                    */
+                },
+                Cancel: function () {
+                    $(this).dialog('close');
+                }
+            }
+
+        });
+
+        $("#dialog-edit").dialog('open');
+        return false;
+    });
+
+    /*
+    $(".confirmDialog").on("click", function (e) {
+        alert("here");
+        var url = $(this).attr('href');
+        alert(url);
+        $("#dialog-confirm").dialog({
+            autoOpen: false,
+            resizable: false,
+            height: 170,
+            width: 350,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            buttons: {
+                "OK": function () {
+                    alert("OK");
+                    $(this).dialog("close");
+                    window.location = url;
+
+                },
+                "Cancel": function () {
+                    alert("cancel");
+                    $(this).dialog("close");
+
+                }
+            }
+        });
+        alert("there");
+        $("#dialog-confirm").dialog('open');
+        return false;
+    });
+
+    $(".viewDialog").live("click", function (e) {
+        var url = $(this).attr('href');
+        $("#dialog-view").dialog({
+            title: 'View Description',
+            autoOpen: false,
+            resizable: false,
+            height: 355,
+            width: 400,
+            show: { effect: 'drop', direction: "up" },
+            modal: true,
+            draggable: true,
+            open: function (event, ui) {
+                $(this).load(url);
+
+            },
+            buttons: {
+                "Close": function () {
+                    $(this).dialog("close");
+
+                }
+            },
+            close: function (event, ui) {
+                $(this).dialog('close');
+            }
+        });
+
+        $("#dialog-view").dialog('open');
+        return false;
+    });
+
+    $("#btncancel").live("click", function (e) {
+        $("#dialog-edit").dialog('close');
+
+    }); */}
+
+// DELETE RECORD
 function deleteRecord(removethis, tableName) {
+    alert("Inside Delete");
     var bgColor = $(removethis).closest('tr').css("background-color");
     var color = $(removethis).closest('tr').css("color");
 
     $(removethis).closest('tr').css({ "background-color": "yellow", "color": "blue" });
     //$(removethis).closest('tr').addClass("selected").addClass("highlight");
-    var dialog = $("#dialog-confirm").dialog({
-        /*
-        autoOpen: false,
-        height: 400,
-        width: 350,
-        modal: false, */
-        autoOpen: false,
+    var dialog = $("#dialog-confirm").dialog({              // https://api.jqueryui.com/dialog/ 
+        autoOpen: false,                                    // https://api.jqueryui.com/dialog/#option-autoOpen
         resizable: false,
-        height: 170,
+        height: "auto",
         width: 350,
-        //show: { effect: 'drop', direction: "up" },
-        show: {
-            effect: "blind",
+        show: {                                             // https://api.jqueryui.com/show/
+            effect: "blind",                                // https://api.jqueryui.com/category/effects/
             duration: 1000
         },
-        hide: {
-            effect: "explode",
+        hide: {                                             // https://jqueryui.com/hide/
+            effect: "clip",
             duration: 1000
         },
-        modal: true,
+        modal: true,                                        // https://jqueryui.com/dialog/#modal-confirmation
         draggable: true,
 
         buttons: {
@@ -127,15 +269,9 @@ function deleteConfirmed(removethis, tableName, bgColor, color) {
     });
 }
 
-// used in
-/*  http://stackoverflow.com/questions/3090230/in-jquery-what-does-fn-mean
-    It allows you to extend jQuery with your own functions.
-    For example, $.fn.something = function{} will allow you to use $("#element").something().
-    $.fn is also synonymous with jQuery.fn which might make your Google searches easier.
+// Section 2: DATATABLE OPERATIONS
 
-    See jQuery Plugins/Authoring
-*/
-
+// PageMe: Superceded by Datatable
 /*
 jQuery.fn.pageMe = function (opts) {    // opts are definedwhen pageMe is invoked during loading of DOM
     var $this = this,                   // "this" is #myTable
@@ -496,91 +632,7 @@ function showDeployments(data) {
     return nestedTable;
 }
 
-// http://stackoverflow.com/questions/13459866/javascript-change-date-into-format-of-dd-mm-yyyy
-function formattedDate(date) {
-    var d = new Date(date || Date.now()),
-        day = '' + d.getDate(),
-        month = '' + (d.getMonth() + 1),
-        year = d.getFullYear();
-
-    if (month.length < 2) month = '0' + month;
-    if (day.length < 2) day = '0' + day;
-
-    return [day, month, year].join('/');
-}
-
-// http://stackoverflow.com/questions/13459866/javascript-change-date-into-format-of-dd-mm-yyyy
-function convertDate(inputFormat) {
-    function pad(s) { return s < 10 ? '0' + s : s; }
-    var d = new Date(inputFormat);
-    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
-}
-
-function formatThis(d) {
-    //alert("Inside formatThis function");
-    // `d` is the original data object for the row
-    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-        '<tr>' +
-            '<td>IMTE:</td>' +
-            '<td>' + d[1] + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td>Serial number:</td>' +
-            '<td>' + d[2] + '</td>' +
-        '</tr>' +
-        '<tr>' +
-            '<td>Extra info:</td>' +
-            '<td>And any further details here (images etc)...</td>' +
-        '</tr>' +
-    '</table>';
-}
-
-//var filesadded = "" //list of files already added
-
-// http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml
-function loadjscssfile(filename, filetype) {
-    if (filetype === "js") { //if filename is a external JavaScript file
-        alert("inside loadjscssfile");
-        var fileref = document.createElement('script');
-        fileref.setAttribute("type", "text/javascript");
-        fileref.setAttribute("src", filename);
-        alert("file loaded");
-    }
-    else if (filetype === "css") { //if filename is an external CSS file
-        fileref = document.createElement("link");
-        fileref.setAttribute("rel", "stylesheet");
-        fileref.setAttribute("type", "text/css");
-        fileref.setAttribute("href", filename);
-    }
-    if (typeof fileref !== "undefined")
-        document.getElementsByTagName("head")[0].appendChild(fileref);
-}
-
-// http://www.javascriptkit.com/javatutors/loadjavascriptcss2.shtml
-function removejscssfile(filename, filetype) {
-    alert("inside removejscssfile");
-    var targetelement = filetype === "js" ? "script" : filetype === "css" ? "link" : "none"; //determine element type to create nodelist from
-    var targetattr = filetype === "js" ? "src" : filetype === "css" ? "href" : "none"; //determine corresponding attribute to test for
-    var allsuspects = document.getElementsByTagName(targetelement);
-    for (var i = allsuspects.length; i >= 0; i--) { //search backwards within nodelist for matching elements to remove
-        if (allsuspects[i] && allsuspects[i].getAttribute(targetattr) !== null && allsuspects[i].getAttribute(targetattr).indexOf(filename) !== -1)
-            allsuspects[i].parentNode.removeChild(allsuspects[i]); //remove element by calling parentNode.removeChild()
-    }
-}
-
-//removejscssfile("somestyle.css", "css") //remove all occurences "somestyle.css" on page
-
-function checkloadjscssfile(filename, filetype) {
-    if (filesadded.indexOf("[" + filename + "]") === -1) {
-        loadjscssfile(filename, filetype);
-        filesadded += "[" + filename + "]"; //List of files added in the form "[filename1],[filename2],etc"
-        alert("file loaded");
-    }
-    else
-        alert("file already added!");
-}
-
-/*  These functions are solely for SystemTabs */
+// SECTION 2B: SOLELY FOR SYSTEMTABS
 // Compose Select List of Components
 function showComponentDDL(myform) {
     /*  Or, if inside $(function) {
@@ -689,12 +741,15 @@ function returnIMTE(removethis) {
     $('#a' + value).closest('tr').remove();
 }
 
+// SECTION 2C: DOCUMENT ONREADY
 $(document).ready(function () {
 
     //checkloadjscssfile("https://cdn.datatables.net/r/bs-3.3.5/jqc-1.11.3,dt-1.10.8/datatables.min.js", "js") //success
 
     // Superceded by Data Tables
     //$('#myTable').pageMe({ pagerSelector: '#myPager', showPrevNext: true, hidePageNumbers: false, perPage: 10 }); // invokes jQuery.fn.pageMe plugin
+
+    var editor; // use a global for the submit and return data rendering in the examples
 
     $('table.dataTable').DataTable({
         "lengthMenu": [[25, 10, 50, -1], [25, 10, 50, "All"]]
@@ -703,7 +758,13 @@ $(document).ready(function () {
     $('table' + '#scrollingTable').DataTable({
         "scrollY": "218px",
         "scrollCollapse": false,
-        "paging": false
+        "paging": false,
+        select: true,
+        buttons: [
+            { extend: "create", editor: editor },
+            { extend: "edit", editor: editor },
+            { extend: "remove", editor: editor }
+        ]
     });
 
     // Add event listener for opening and closing details
@@ -742,128 +803,89 @@ $(document).ready(function () {
     });
     */
 
-    // https://www.mindstick.com/Articles/1117/crud-operation-using-modal-dialog-in-asp-dot-net-mvc
-    //$.ajaxSetup({ cache: false });   
-    /*
-    $("#openDialog").on("click", function (e) {
-        e.preventDefault();
-        var url = $(this).attr('href');
-        alert(url);
-
-        $("#dialog-edit").dialog({
-            title: 'Add Record',
-            autoOpen: false,
-            resizable: false,
-            height: 500,
-            width: 500,
-            show: { effect: 'drop', direction: "up" },
-            modal: true,
-            draggable: true,
-            open: function (event, ui) {
-                event.preventDefault();
-                $(this).load(url);
-            },
-            close: function (event, ui) {
-                $(this).dialog('close');
-            }
-        });
-
-        $("#dialog-edit").dialog('open');
-        return false;
-    });
-
-    $(".editDialog").on("click", function (e) {
-        e.preventDefault(); // added jss 09Aug'16
-        var url = $(this).attr('href');
-
-        $("#dialog-edit").dialog({
-            title: 'Edit Record',
-            autoOpen: false,
-            resizable: false,
-            height: 355,
-            width: 400,
-            show: { effect: 'drop', direction: "up" },
-            modal: true,
-            draggable: true,
-            open: function (event, ui) {
-                $(this).load(url);
-
-            },
-            close: function (event, ui) {
-                $(this).dialog('close');
-            }
-        });
-
-        $("#dialog-edit").dialog('open');
-        return false;
-    });
-    */
-    /*
-    $(".confirmDialog").on("click", function (e) {
-        alert("here");
-        var url = $(this).attr('href');
-        alert(url);
-        $("#dialog-confirm").dialog({
-            autoOpen: false,
-            resizable: false,
-            height: 170,
-            width: 350,
-            show: { effect: 'drop', direction: "up" },
-            modal: true,
-            draggable: true,
-            buttons: {
-                "OK": function () {
-                    alert("OK");
-                    $(this).dialog("close");
-                    window.location = url;
-
-                },
-                "Cancel": function () {
-                    alert("cancel");
-                    $(this).dialog("close");
-
-                }
-            }
-        });
-        alert("there");
-        $("#dialog-confirm").dialog('open');
-        return false;
-    });
-
-    $(".viewDialog").live("click", function (e) {
-        var url = $(this).attr('href');
-        $("#dialog-view").dialog({
-            title: 'View Description',
-            autoOpen: false,
-            resizable: false,
-            height: 355,
-            width: 400,
-            show: { effect: 'drop', direction: "up" },
-            modal: true,
-            draggable: true,
-            open: function (event, ui) {
-                $(this).load(url);
-
-            },
-            buttons: {
-                "Close": function () {
-                    $(this).dialog("close");
-
-                }
-            },
-            close: function (event, ui) {
-                $(this).dialog('close');
-            }
-        });
-
-        $("#dialog-view").dialog('open');
-        return false;
-    });
-
-    $("#btncancel").live("click", function (e) {
-        $("#dialog-edit").dialog('close');
-
-    }); */
-
 });
 
+// SECTION 2D: HELPER FUNCTIONS FOR DATATABLES
+// http://stackoverflow.com/questions/13459866/javascript-change-date-into-format-of-dd-mm-yyyy
+function formattedDate(date) {
+    var d = new Date(date || Date.now()),
+        day = '' + d.getDate(),
+        month = '' + (d.getMonth() + 1),
+        year = d.getFullYear();
+
+    if (month.length < 2) month = '0' + month;
+    if (day.length < 2) day = '0' + day;
+
+    return [day, month, year].join('/');
+}
+
+// http://stackoverflow.com/questions/13459866/javascript-change-date-into-format-of-dd-mm-yyyy
+function convertDate(inputFormat) {
+    function pad(s) { return s < 10 ? '0' + s : s; }
+    var d = new Date(inputFormat);
+    return [pad(d.getDate()), pad(d.getMonth() + 1), d.getFullYear()].join('/');
+}
+
+function formatThis(d) {
+    //alert("Inside formatThis function");
+    // `d` is the original data object for the row
+    return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+        '<tr>' +
+        '<td>IMTE:</td>' +
+        '<td>' + d[1] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>Serial number:</td>' +
+        '<td>' + d[2] + '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>Extra info:</td>' +
+        '<td>And any further details here (images etc)...</td>' +
+        '</tr>' +
+        '</table>';
+}
+
+//var filesadded = "" //list of files already added
+
+// http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml
+function loadjscssfile(filename, filetype) {
+    if (filetype === "js") { //if filename is a external JavaScript file
+        alert("inside loadjscssfile");
+        var fileref = document.createElement('script');
+        fileref.setAttribute("type", "text/javascript");
+        fileref.setAttribute("src", filename);
+        alert("file loaded");
+    }
+    else if (filetype === "css") { //if filename is an external CSS file
+        fileref = document.createElement("link");
+        fileref.setAttribute("rel", "stylesheet");
+        fileref.setAttribute("type", "text/css");
+        fileref.setAttribute("href", filename);
+    }
+    if (typeof fileref !== "undefined")
+        document.getElementsByTagName("head")[0].appendChild(fileref);
+}
+
+// http://www.javascriptkit.com/javatutors/loadjavascriptcss2.shtml
+function removejscssfile(filename, filetype) {
+    alert("inside removejscssfile");
+    var targetelement = filetype === "js" ? "script" : filetype === "css" ? "link" : "none"; //determine element type to create nodelist from
+    var targetattr = filetype === "js" ? "src" : filetype === "css" ? "href" : "none"; //determine corresponding attribute to test for
+    var allsuspects = document.getElementsByTagName(targetelement);
+    for (var i = allsuspects.length; i >= 0; i--) { //search backwards within nodelist for matching elements to remove
+        if (allsuspects[i] && allsuspects[i].getAttribute(targetattr) !== null && allsuspects[i].getAttribute(targetattr).indexOf(filename) !== -1)
+            allsuspects[i].parentNode.removeChild(allsuspects[i]); //remove element by calling parentNode.removeChild()
+    }
+}
+
+//removejscssfile("somestyle.css", "css") //remove all occurences "somestyle.css" on page
+
+function checkloadjscssfile(filename, filetype) {
+    if (filesadded.indexOf("[" + filename + "]") === -1) {
+        loadjscssfile(filename, filetype);
+        filesadded += "[" + filename + "]"; //List of files added in the form "[filename1],[filename2],etc"
+        alert("file loaded");
+    }
+    else
+        alert("file already added!");
+}

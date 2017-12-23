@@ -1,4 +1,5 @@
-﻿@model IEnumerable<TrackMED.Models.Description>
+﻿@using Newtonsoft.Json;
+@model IEnumerable<TrackMED.Models.Description>
 
 @{
     ViewBag.Title = "Index: Descriptions";
@@ -6,7 +7,7 @@
 
 <!--
 <style type="text/css" class="init">
-    
+
     td.details-control {
         background: url('https://datatables.net/examples/resources/details_open.png') no-repeat center center;
         cursor: pointer;
@@ -18,12 +19,11 @@
 
 </style>
 -->
-
 <!--
 /* Copyright 2014 Evernote Corporation. All rights reserved. */
 
 <style id="style-1-cropbar-clipper">
-    
+
     .en-markup-crop-options {
         top: 18px !important;
         left: 50% !important;
@@ -37,7 +37,7 @@
             margin-left: 0px !important;
         }
 </style>
---> 
+-->
 
 <h2>DESCRIPTIONS</h2>
 
@@ -60,21 +60,26 @@
                 @foreach (var item in Model)
                 {
                     var tableName = " " + item.GetType();
-                    <tr role="row" rel="@item.Id@tableName">
-                        <td class="details-control glyphicon glyphicon-plus">
-                            <!-- <a href="#!" rel="item.Id" onclick="showComponents(this, 'Models')">+</a> -->
-                            <!-- <a asp-action="Index" asp-route-id="item.Id" >+</a> -->
-                        </td>
-                        <td>@Html.DisplayFor(modelItem => item.Desc)</td>
-                        <td>@Html.DisplayFor(modelItem => item.CreatedAtUtc)</td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id" class="editDialog">Edit</a> |
-                            <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> | -->
-                            <!-- <a asp-route-id="@item.Id" onclick="deleteRecord(this, 'Descriptions')" >Delete</a> -->
-                            <a href="#!" rel="@item.Id" onclick="deleteRecord(this, 'Descriptions')">Delete</a>
-                        </td>
-                    </tr>
-                }
+                    var itemJs = JsonConvert.SerializeObject(item);
+                    // var itemJs = Html.Raw(Json.Encode(item));  // https://stackoverflow.com/questions/36756829/pass-c-sharp-model-from-view-to-javascript
+                    // https://forums.asp.net/t/2054702.aspx?what+Html+Raw+and+Json+Encode+does+
+                    var x = "X";
+                                <tr role="row" rel="@item.Id@tableName">
+                                    <td class="details-control glyphicon glyphicon-plus">
+                                        <!-- <a href="#!" rel="item.Id" onclick="showComponents(this, 'Models')">+</a> -->
+                                        <!-- <a asp-action="Index" asp-route-id="item.Id" >+</a> -->
+                                    </td>
+                                    <td>@Html.DisplayFor(modelItem => item.Desc)</td>
+                                    <td>@Html.DisplayFor(modelItem => item.CreatedAtUtc)</td>
+                                    <td>
+                                        <!--<a asp-action="Edit" asp-route-id="@item.Id" onclick="editRecord(this, 'Descriptions')" class="editDialog">Edit</a> | -->
+                                        <a href="#!" rel="@itemJs" onclick="editRecord(this, 'Descriptions')" class="editDialog">Edit</a> |
+                                        <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> | -->
+                                        <!-- <a asp-route-id="@item.Id" onclick="deleteRecord(this, 'Descriptions')" >Delete</a> -->
+                                        <a href="#!" rel="@item.Id" onclick="deleteRecord(this, 'Descriptions')">Delete</a>
+                                    </td>
+                                </tr>
+                            }
             </tbody>
         </table>
     </div>
@@ -90,3 +95,55 @@
         Are you sure you want to delete this?
     </p>
 </div>
+
+
+<div id="dialog-edit" title="Edit Record" style="display: none">
+    <div>
+        <div class="modal-body">
+            <p>some content</p>
+            <input type="text" name="desc" id="desc" value="" />
+        </div>
+    </div>
+</div>
+
+<!--
+
+<div id="dialog-edit" title="Edit Record" style="display: none">
+    <form asp-action="Edit">
+        <div class="form-horizontal">
+            <h4>Description</h4>
+            <hr />
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+
+            <div class="form-group">
+                <label asp-for="Desc" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Desc" class="form-control" />
+                    <span asp-validation-for="Desc" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tag" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="Tag" class="form-control" />
+                    <span asp-validation-for="Tag" class="text-danger" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label asp-for="CreatedAtUtc" class="col-md-2 control-label"></label>
+                <div class="col-md-10">
+                    <input asp-for="CreatedAtUtc" class="form-control" />
+                    <span asp-validation-for="CreatedAtUtc" class="text-danger" />
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+-->
