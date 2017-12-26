@@ -1,5 +1,5 @@
 ﻿@* @model IEnumerable<TrackMED.Models.Description> *@
-@model TrackMED.ViewModels.DescComponentModel<Description>
+@model TrackMED.ViewModels.EntityViewModel
 
 @{
     ViewBag.Title = "Index";
@@ -28,14 +28,14 @@
         <thead>
             <tr>
                 <th></th>
-                <th>@Html.DisplayNameFor(model => model.descRecords[0].Desc)</th>
-                <th>@Html.DisplayNameFor(model => model.descRecords[0].Tag)</th>
-                <th>@Html.DisplayNameFor(model => model.descRecords[0].CreatedAtUtc)</th>
+                @* <th>@Html.DisplayNameFor(model => model.EntityItems[0].Desc)</th> *@
+                <th>Desc</th>
+                <th>CreatedAtUtc</th>
                 <th></th>
             </tr>
         </thead>
         <tbody id="myTable">
-            @foreach (var item in Model.descRecords)
+            @foreach (var item in Model.EntityItems)
             {
                 <tr class="rowMaster">
                     <td>
@@ -53,6 +53,7 @@
                     </td>
                 </tr>
 
+                <!--
                 if (item.Id == Model.Id && Model.linkedComponents.Count > 0)
                 {
                     <tr class="rowDetail">
@@ -92,7 +93,7 @@
                             </table>
                         </td>
                     </tr>
-                }
+                } -->
             }
         </tbody>
     </table>

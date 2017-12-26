@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TrackMED.Models;
 using TrackMED.Services;
+using TrackMED.ViewModels;
 
 namespace TrackMED.Controllers
 {
@@ -22,17 +24,23 @@ namespace TrackMED.Controllers
                         .OrderBy(x => x.Desc);
             return View(items);
         }
+        
 
         /*
-        public async Task<ActionResult> Index(String id = null)
+        public async Task<ActionResult> Index()
         {
             var allRecords = await _entityService.GetEntitiesAsync();
+            Description desc = allRecords[0];
 
-            var model = new DescComponentModel<Description>();
-            model.descRecords = allRecords
-                        .OrderBy(x => x.Desc)
-                        .ToList();
+            var items = allRecords
+                        .OrderBy(x => x.Desc);
+            var model = new EntityViewModel<Description>(items, desc);
 
+            ViewBag.EntityType = typeof(Description);
+            // var model = new EntityViewModel<IEntityVM>();
+
+            //.ToList();
+            
             if (id != null)
             {
                 model.Id = id;
@@ -42,9 +50,12 @@ namespace TrackMED.Controllers
                       .Where(x => x.DescriptionID == id)
                       .ToList();
             }
+            
+
             return View(model);
         }
-               
+        
+        
         // GET: Entities/Details/5
         public async Task<ActionResult> Details(string id)
         {
@@ -124,7 +135,7 @@ namespace TrackMED.Controllers
             }
             return View(Entity);
         }
-        */
+        
         /*
         // GET: Entities/Delete/5
         public async Task<ActionResult> Delete(string id)
@@ -159,6 +170,7 @@ namespace TrackMED.Controllers
             return _entityService.VerifyEntityAsync(id).IsCompleted;
         }
         */
+
         [HttpGet]
         public async Task<IEnumerable<Component>> LoadComponents(string descId)
         {

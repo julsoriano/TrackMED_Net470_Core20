@@ -18,9 +18,12 @@
   <ItemGroup>
     <Compile Remove="Controllers\ManageController.cs" />
     <Compile Remove="Services\Util.cs" />
+    <Compile Remove="ViewModels\CallViewModel.cs" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Description\Index - Copy 1.cshtml" />
+    <Content Remove="Views\Description\Index - Copy 2.cshtml" />
     <Content Remove="Views\Description\Index - Working Copy %28No DT%29.cshtml" />
     <Content Remove="Views\Owner\Index - Working Copy %28No DT%29.cshtml" />
     <Content Remove="Views\Shared\_Layout w Sidebar - Core 1.cshtml" />
@@ -64,8 +67,6 @@
     <None Include="Views\Description\Details.cshtml" />
     <None Include="Views\Description\Edit Partial.cshtml" />
     <None Include="Views\Description\Edit.cshtml" />
-    <None Include="Views\Description\Index jQuery Dialog.cshtml" />
-    <None Include="Views\Description\Index DT.cshtml" />
     <None Include="Views\Description\_CreateOrEdit.cshtml" />
     <None Include="Views\Home\About.cshtml" />
     <None Include="Views\Home\Contact.cshtml" />
@@ -111,6 +112,7 @@
 
   <ItemGroup>
     <Folder Include="Properties\PublishProfiles\" />
+    <Folder Include="ViewModels\" />
   </ItemGroup>
 
 </Project>
