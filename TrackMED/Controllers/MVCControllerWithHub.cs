@@ -2,7 +2,9 @@
 //using Microsoft.AspNet.SignalR.Hubs;
 //using Microsoft.AspNet.SignalR;
 using System;
+using System.Linq;
 using System.Data;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrackMED.Models;
 using TrackMED.Services;
@@ -22,6 +24,9 @@ namespace TrackMED.Controllers
         internal readonly IEntityService<T> _entityService;
         internal readonly IEntityService<Component> _componentService;
         internal readonly IEntityService<SystemTab> _systemtabService;
+        internal readonly string entType = typeof(T).ToString().ToUpper();
+        internal readonly string sPattern = "^TRACKMED.MODELS.([A-Za-z0-9_]+)$";
+        internal Match m;
 
         public MVCControllerWithHub(IEntityService<T> entityService,
                                     IEntityService<Component> componentService)

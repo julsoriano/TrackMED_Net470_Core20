@@ -2,8 +2,12 @@
 @model IEnumerable<TrackMED.Models.Description>
 
 @{
-    ViewBag.Title = "Index: Descriptions";
+    ViewBag.Title = "Index: " + ViewBag.EntityType + "S";
+    var entType = ViewBag.EntityType + "S";
 }
+
+<h2>@entType</h2>
+
 
 <!--
 <style type="text/css" class="init">
@@ -39,8 +43,6 @@
 </style>
 -->
 
-<h2>DESCRIPTIONS</h2>
-
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
@@ -64,28 +66,28 @@
                     var itemJs = JsonConvert.SerializeObject(item);
                     // var itemJs = Html.Raw(Json.Encode(item));  // https://stackoverflow.com/questions/36756829/pass-c-sharp-model-from-view-to-javascript
                     // https://forums.asp.net/t/2054702.aspx?what+Html+Raw+and+Json+Encode+does+
-                   
-                <tr role="row" rel="@item.Id@tableName">
-                    <td class="details-control glyphicon glyphicon-plus">
-                        <!-- <a href="#!" rel="item.Id" onclick="showComponents(this, 'Models')">+</a> -->
-                        <!-- <a asp-action="Index" asp-route-id="item.Id" >+</a> -->
-                    </td>
-                    <td>@Html.DisplayFor(modelItem => item.Desc)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Tag)</td>
-                    <td>@Html.DisplayFor(modelItem => item.CreatedAtUtc)</td>
-                    <td>
-                        <a href="#!" rel="@itemJs" onclick="editRecord(this, 'Descriptions')" class="editDialog">Edit</a> |
-                        <!-- in lieu of:
-                            <a asp-action="Edit" asp-route-id="@itemJs" onclick="editRecord(this, 'Descriptions')" class="editDialog">Edit</a> |
-                            which produces an 'HTTP Error 404.11 - Not Found' in function 'editRecord' of site.js
-                        -->
 
-                        <a href="#!" rel="@item.Id" onclick="deleteRecord(this, 'Descriptions')">Delete</a>
-                        <!-- <a asp-route-id="@item.Id" onclick="deleteRecord(this, 'Descriptions')" >Delete</a> -->
-                        <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> | -->
+                    <tr role="row" rel="@item.Id@tableName">
+                        <td class="details-control glyphicon glyphicon-plus">
+                            <!-- <a href="#!" rel="item.Id" onclick="showComponents(this, 'Models')">+</a> -->
+                            <!-- <a asp-action="Index" asp-route-id="item.Id" >+</a> -->
+                        </td>
+                        <td>@Html.DisplayFor(modelItem => item.Desc)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Tag)</td>
+                        <td>@Html.DisplayFor(modelItem => item.CreatedAtUtc)</td>
+                        <td>
+                            <a href="#!" rel="@itemJs" onclick="editRecord(this, 'Descriptions')" class="editDialog">Edit</a> |
+                            <!-- in lieu of:
+                                <a asp-action="Edit" asp-route-id="@itemJs" onclick="editRecord(this, 'Descriptions')" class="editDialog">Edit</a> |
+                                which produces an 'HTTP Error 404.11 - Not Found' in function 'editRecord' of site.js
+                            -->
 
-                    </td>
-                </tr>
+                            <a href="#!" rel="@item.Id" onclick="deleteRecord(this, 'Descriptions')">Delete</a>
+                            <!-- <a asp-route-id="@item.Id" onclick="deleteRecord(this, 'Descriptions')" >Delete</a> -->
+                            <!-- <a asp-action="Details" asp-route-id="@item.Id">Details</a> | -->
+
+                        </td>
+                    </tr>
                 }
             </tbody>
         </table>

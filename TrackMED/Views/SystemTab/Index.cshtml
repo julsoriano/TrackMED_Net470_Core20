@@ -1,10 +1,11 @@
 ﻿@model IEnumerable<TrackMED.Models.SystemTab>
 
 @{
-    ViewBag.Title = "Index: Systems";
+    ViewBag.Title = "Index: " + "SYSTEMS";
+    var entType = "SYSTEMS";
 }
 
-<h2>SYSTEMS</h2>
+<h2>@entType</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")

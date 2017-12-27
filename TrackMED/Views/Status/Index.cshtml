@@ -3,10 +3,11 @@
 
 
 @{
-    ViewBag.Title = "Index: Status";
+    ViewBag.Title = "Index: " + ViewBag.EntityType;
+    var entType = ViewBag.EntityType;
 }
 
-<h2>STATUS</h2>
+<h2>@entType</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")

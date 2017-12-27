@@ -2,10 +2,11 @@
 @model IEnumerable<TrackMED.Models.Owner>
 
 @{
-    ViewBag.Title = "Index: Owners";
+    ViewBag.Title = "Index: " + ViewBag.EntityType + "S";
+    var entType = ViewBag.EntityType + "S";
 }
 
-<h2>OWNERS</h2>
+<h2>@entType</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")

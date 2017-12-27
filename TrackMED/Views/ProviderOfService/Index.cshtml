@@ -2,10 +2,11 @@
 @model IEnumerable<TrackMED.Models.ProviderOfService>
 
 @{
-    ViewBag.Title = "Index: Service Providers";
+    ViewBag.Title = "Index: " + ViewBag.EntityType + "S";
+    var entType = ViewBag.EntityType + "S";
 }
 
-<h2>SERVICE PROVIDERS</h2>
+<h2>@entType</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
