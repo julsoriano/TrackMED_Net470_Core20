@@ -26,16 +26,5 @@ namespace TrackMED.Controllers
                         .OrderBy(x => x.Desc);
             return View(items);
         }
-
-        public async Task<IEnumerable<Component>> LoadComponents(string descId)
-        {
-            List<Component> compRecords = await _componentService.GetSelectedEntitiesAsync("Status", descId);
-            var items = compRecords
-                          .OrderBy(x => x.imte)
-                          //.Where(x => x.StatusID == descId)
-                          .ToList();
-
-            return items;
-        }
     }
 }

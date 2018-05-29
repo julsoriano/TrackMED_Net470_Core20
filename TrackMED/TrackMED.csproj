@@ -17,8 +17,12 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\ManageController.cs" />
+    <Compile Remove="Controllers\SystemsDescriptionController Original.cs" />
+    <Compile Remove="Services\EntityService Original.cs" />
     <Compile Remove="Services\Util.cs" />
     <Compile Remove="ViewModels\CallViewModel.cs" />
+    <Compile Remove="Views\Shared\_IndexPartial1.cshtml.cs" />
+    <Compile Remove="Views\Shared\_IndexPartial2.cshtml.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,11 +30,19 @@
     <Content Remove="Views\Description\Index - Copy 2.cshtml" />
     <Content Remove="Views\Description\Index - Working Copy %28No DT%29.cshtml" />
     <Content Remove="Views\Owner\Index - Working Copy %28No DT%29.cshtml" />
+    <Content Remove="Views\Shared\_IndexPartial1.cshtml" />
+    <Content Remove="Views\Shared\_IndexPartial2.cshtml" />
     <Content Remove="Views\Shared\_Layout w Sidebar - Core 1.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Properties\PublishProfiles\TrackMED - Web Deploy.pubxml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="Extensions\HttpRequestExtensions.cs" />
+    <Compile Include="Extensions\ServiceExtensions.cs" />
+    <Compile Include="Extensions\TimeoutHandler.cs" />
   </ItemGroup>
 
   <ItemGroup>

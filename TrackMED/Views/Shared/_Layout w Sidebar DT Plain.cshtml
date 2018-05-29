@@ -12,9 +12,9 @@
         <!-- Added: Sidebar Navigation -->
         <link rel="stylesheet" href="~/css/dashboard.css" />
 
-        <!-- Added: DataTables CSS Source - Refer to https://startbootstrap.com/template-overviews/sb-admin-2/-->
+        <!-- Added: DataTables CSS Source - Refer to https://startbootstrap.com/template-overviews/sb-admin-2/  -->
         <link rel="stylesheet" href="~/css/plugins/dataTables.bootstrap.css">
-
+             
         <!-- Added: jQuery Widgets, ie., Dialog Box-->
         <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     </environment>
@@ -112,9 +112,8 @@
     </div>
 
     <environment include="Development">
+        <!-- Basic -->
         <script src="~/lib/jquery/dist/jquery.js"></script>
-        <!-- Only if using Bootstrap's modal form -->
-        <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script> -->
         <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
         <script src="~/js/site.js" asp-append-version="true"></script>
 
@@ -133,15 +132,13 @@
         -->
     </environment>
     <environment exclude="Development">
+        <!-- Basic -->
         <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
                 asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
                 asp-fallback-test="window.jQuery"
                 crossorigin="anonymous"
                 integrity="sha384-K+ctZQ+LL8q6tP7I94W+qzQsfRV2a+AfHIi9k8z8l9ggpc8X+Ytst4yBo/hH+8Fk">
         </script>
-
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.3/umd/popper.min.js" integrity="sha384-vFJXuSJphROIrBnz7yo7oB41mKfc8JzQZiCq4NCceLEaO4IHwicKwpJf9c9IpFgh" crossorigin="anonymous"></script>
-
         <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
                 asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
                 asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"

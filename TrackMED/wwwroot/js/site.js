@@ -31,26 +31,29 @@
     */
 
 // EDIT RECORD
-function editRecord(editthis, tableName) {
+function editRecord(editthis, modelName) {
     // https://www.mindstick.com/Articles/1117/crud-operation-using-modal-dialog-in-asp-dot-net-mvc
-    var entJson = $(editthis).attr('rel');      // already in Json format            
+    var entJson = $(editthis).attr('rel');      // in Json format            
 
+    // The JSON.parse() method parses a JSON string, constructing the JavaScript value or object described by the string.
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
     var obj = JSON.parse(entJson);      // https://www.w3schools.com/js/js_json.asp and https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/parse
-    var myDesc = obj.desc;
 
-    document.getElementById("tableName").innerHTML = tableName;
+    document.getElementById("tableName").innerHTML = modelName;
 
+    // Fill up modal form with original data
     $(".modal-body #id").val(obj.id);
     $(".modal-body #desc").val(obj.desc);
 
     $("#tagDiv").hide();
-    if(tableName == "Descriptions") {
+    if (modelName == "DESCRIPTION") {
         $(".modal-body #tag").val(obj.tag);
         $("#tagDiv").show();
     };
- 
+
     $(".modal-body #createdAtUtc").val(obj.createdAtUtc);
 
+    // open edit dialog
     $("#dialog-edit").dialog({
         title: 'Edit Record',
         autoOpen: false,
@@ -61,37 +64,87 @@ function editRecord(editthis, tableName) {
         modal: true,
         draggable: true,
 
-        /* This block of code is not needed because ASP Razor sends back form data in model format which the controller action expects
+        // if not using ASP.NET
         buttons: {
             Save: function () {
                 event.preventDefault();
-                var url = "/" + tableName + "/Edit";
 
-                // Send the data using post. See https://api.jquery.com/jquery.post/
-                // var posting = $.put(url, { id: value, entity: editthis });
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    // https://stackoverflow.com/questions/28701164/how-to-use-html-rawjson-encodemodel-properly
-                    data: { id: value, entity: JSON.stringify($('form').serializeObject()) },
-                    success: function (data) {
-                        alert("done");
-                    },
-                    error: function () {
-                        alert("Error!!!!");
-                    }
-                });
+                // get new values from form based on method described in http://www.c-sharpcorner.com/blogs/using-ajax-in-asp-net-mvc
+                var entity = {};
+                entity.id = $(".modal-body #id").val();
+                entity.desc = $(".modal-body #desc").val();
 
+                if (modelName == "DESCRIPTION") {
+                    entity.tag = $(".modal-body #tag").val();
+                };
+
+                entity.createdAtUtc = $(".modal-body #createdAtUtc").val();
+
+                editConfirmed(editthis, modelName, entity);
+                $(this).dialog('close');
             },
             Cancel: function () {
                 $(this).dialog('close');
             }
         }
-        */
     });
 
     $("#dialog-edit").dialog('open');
     return false;
+}
+
+function editConfirmed(editthis, modelName, entity) {
+    var url = "/" + modelName + "/Edit";
+
+    //var entity = JSON.stringify($('form').serializeObject());
+
+    // Send the data using post. See https://api.jquery.com/jquery.post/
+    // var posting = $.post(url, { entity: entity });
+    // above is equivalent to:
+    var posting = 
+        $.ajax({
+          type: "POST",
+          url: url,
+          // https://stackoverflow.com/questions/15317856/asp-net-mvc-posting-json
+          data: { "id" : entity.id, "desc": entity.desc, "tag": entity.tag, "createdAtUtc": entity.createdAtUtc},
+          //contentType: "application/json; charset=utf-8",
+          accept: "application/json"
+        });
+    
+    // remove record from list
+    posting.done(function (data, textStatus, xhr) {
+
+        // See http://www.w3schools.com/json/json_eval.asp to parse a JSON string
+        var obj = JSON.parse(xhr.responseText);
+        if (obj.success) {
+            alert("done");
+        }
+        else {
+            alert("Failure is not an option");
+        }
+    });
+
+    // alert if not successful
+    posting.fail(function (xhr, textStatus, errorThrown) {
+        if (xhr.status !== null) {
+            switch (xhr.status) {
+                case "404":
+                    alert(xhr.status + ": Page not found ");
+                    break;
+
+                default:
+                    alert(xhr.status + ": " + xhr.statusText);
+                    break;
+            }
+        }
+
+        alert("error here");
+        // possible values for the second argument (besides null) are "timeout", "error", "abort", and "parsererror". 
+        if (textStatus !== null) alert("Error Status: " + textStatus);
+
+        // when an HTTP error occurs, errorThrown receives the textual portion of the HTTP status, such as "Not Found" or "Internal Server Error." 
+        alert("HTTP error thrown: " + errorThrown);
+    });
 }
 
 $.fn.serializeObject = function () {
@@ -111,7 +164,8 @@ $.fn.serializeObject = function () {
 };
 
 // DELETE RECORD
-function deleteRecord(removethis, tableName) {
+function deleteRecord(removethis, modelName) {
+    alert("here");
     var bgColor = $(removethis).closest('tr').css("background-color");
     var color = $(removethis).closest('tr').css("color");
 
@@ -136,7 +190,7 @@ function deleteRecord(removethis, tableName) {
         buttons: {
             OK: function () {
                 event.preventDefault();
-                deleteConfirmed(removethis, tableName, bgColor, color);
+                deleteConfirmed(removethis, modelName, bgColor, color);
                 dialog.dialog("close");
             },
             Cancel: function () {
@@ -148,12 +202,14 @@ function deleteRecord(removethis, tableName) {
     });
 
     dialog.dialog('open');
+    return false;
 }
 
-function deleteConfirmed(removethis, tableName, bgColor, color) {
+function deleteConfirmed(removethis, modelName, bgColor, color) {
     var value = $(removethis).attr('rel');     // or: var value = (removethis.id).substr(1);
-    var url = "/" + tableName + "/Remove";
-
+    var url = "/" + modelName + "/Remove";
+    alert(value);
+    alert(url);
     // Send the data using post. See https://api.jquery.com/jquery.post/
     var posting = $.post(url, { id: value });
     /*  above is equivalent to:
@@ -204,6 +260,7 @@ function deleteConfirmed(removethis, tableName, bgColor, color) {
             }
         }
 
+        alert("error here");
         // possible values for the second argument (besides null) are "timeout", "error", "abort", and "parsererror". 
         if(textStatus !== null) alert("Error Status: " + textStatus);
 
@@ -496,7 +553,7 @@ function showRelatedTable(value, tableName) {
     $.ajax({
         method: "GET",
         url: url,
-        data: { descId: value },
+        data: { tableName: tableName, descId: value },
         async: false,
         cache: false
     })
@@ -519,7 +576,7 @@ function showRelatedTable(value, tableName) {
                 break;
 
             default:
-                if (data.length > 0) nestedTable = showRelatedComponents(data);
+                if (data.length > 0) nestedTable = showRelatedComponents(data)
                 break;
         }
     });
@@ -636,6 +693,7 @@ function showRelatedComponents(data) {
                 '<table class="table table-striped table-condensed table-hover table-component" cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
                     '<thead>' +
                         '<tr>' +
+                            '<th>' + 'Index' + '</th>' +
                             '<th>' + 'Asset#' + '</th>' +
                             '<th>' + 'IMTE' + '</th>' +
                             '<th>' + 'Serial Number' + '</th>' +
@@ -648,29 +706,31 @@ function showRelatedComponents(data) {
                             '<th>' + 'Maintenance Due Date' + '</th>' +
                         '</tr>' +
                     '</thead>' +
-                    '<tbody>';
+                    '<tbody>';data
 
     $.each(data, function (index, itemData) {
         // add detail row 
+
         nestedTable +=
             '<tr>' +
-                '<td>' + itemData.assetnumber + '</td>' +
-                '<td>' + itemData.imte + '</td>' +
-                '<td>' + itemData.serialnumber + '</td>';
+            '<td>' + (index +1) + '</td>' +
+            '<td>' + itemData.assetnumber + '</td>' +
+            '<td>' + itemData.imte + '</td>' +
+            '<td>' + itemData.serialnumber + '</td>';
 
-        if (itemData.descriptionID !== null) nestedTable += '<td>' + itemData.description.desc + '</td>';
+        if (itemData.description !== null) nestedTable += '<td>' + itemData.description.desc + '</td>';
         else nestedTable += '<td></td>';
 
-        if (itemData.ownerID !== null) nestedTable += '<td>' + itemData.owner.desc + '</td>';
+        if (itemData.owner !== null) nestedTable += '<td>' + itemData.owner.desc + '</td>';
         else nestedTable += '<td></td>';
 
-        if (itemData.statusID !== null) nestedTable += '<td>' + itemData.status.desc + '</td>';
+        if (itemData.status !== null) nestedTable += '<td>' + itemData.status.desc + '</td>';
         else nestedTable += '<td></td>';
 
-        if (itemData.model_ManufacturerID !== null) nestedTable += '<td>' + itemData.model_Manufacturer.desc + '</td>';
+        if (itemData.model_Manufacturer !== null) nestedTable += '<td>' + itemData.model_Manufacturer.desc + '</td>';
         else nestedTable += '<td></td>';
 
-        if (itemData.providerOfServiceID !== null) nestedTable += '<td>' + itemData.providerOfServiceID.desc + '</td>';
+        if (itemData.providerOfService !== null) nestedTable += '<td>' + itemData.providerOfServiceID.desc + '</td>';
         else nestedTable += '<td></td>';
 
         if (itemData.calibrationDate !== null) nestedTable += '<td>' + formattedDate(itemData.calibrationDate) + '</td>';
@@ -678,7 +738,6 @@ function showRelatedComponents(data) {
 
         if (itemData.maintenanceDate !== null) nestedTable += '<td>' + formattedDate(itemData.maintenanceDate) + '</td>';
         else nestedTable += '<td></td>';
-
     });
 
     nestedTable += '</tbody>' + '</table>' + '</td>' + '</tr>';
@@ -860,7 +919,6 @@ $(document).ready(function () {
         var table = $('#nestedTable').DataTable();
         var tr = $(this).closest('tr');
         var value = tr.attr('rel').trim();
-        //var partsArray = /\s*(\w+)\s*(.+$)/.exec(value);
         var partsArray = /\s*(\w+)\s*TrackMED.Models.(.+$)/.exec(value);
         var row = table.row(tr);
         var td = $(this).closest('td');

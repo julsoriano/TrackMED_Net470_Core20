@@ -49,15 +49,5 @@ namespace TrackMED.Controllers
             return View(model);
         }
         */
-        public async Task<IEnumerable<Component>> LoadComponents(string descId)
-        {
-            List<Component> compRecords = await _componentService.GetSelectedEntitiesAsync("Model_Manufacturer", descId);
-            var items = compRecords
-                          .OrderBy(x => x.imte)
-                          //.Where(x => x.Model_ManufacturerID == descId)
-                          .ToList();
-
-            return items;
-        }
     }
 }

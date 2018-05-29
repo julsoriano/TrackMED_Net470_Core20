@@ -1,4 +1,7 @@
-﻿@model IEnumerable<TrackMED.Models.SystemTab>
+﻿@using Newtonsoft.Json;
+@using System.Text.RegularExpressions;
+
+@model IEnumerable<TrackMED.Models.SystemTab>
 
 @{
     ViewBag.Title = "Index: " + "SYSTEMS";
@@ -26,22 +29,37 @@
                 </tr>
             </thead>
             <tbody id="myTable">
-                @foreach (var item in Model)
-                {
-                    var tableName = " " + item.GetType();
-                    <tr role="row" rel="@item.Id@tableName">
-                        <td class="details-control glyphicon glyphicon-plus"></td>
-                        <td>@Html.DisplayFor(modelItem => item.imte)</td>
-                        <td>@Html.DisplayFor(modelItem => item.SystemsDescription.Desc)</td>
-                        <td>@Html.DisplayFor(modelItem => item.DeploymentDate)</td>
-                        <td>@Html.DisplayFor(modelItem => item.Location.Desc)</td>
-                        <td>@Html.DisplayFor(modelItem => item.ReferenceNo)</td>
-                        <td>
-                            <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                            <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                            <a href="#!" rel="@item.Id " onclick="deleteRecord(this, 'Systems')">Delete</a>
-                        </td>
-                    </tr>
+                @{bool initflag = true;
+                    var tableName = "";
+                    var itemJs = "";
+                    var modelName = "";
+
+                    @foreach (var item in @Model)
+                    {
+                        if (@initflag)
+                        {
+                            tableName = item.GetType().ToString();
+                            itemJs = JsonConvert.SerializeObject(item);
+                            var sPattern = "^TrackMED.Models.([A-Za-z0-9_]+)$";
+                            var m = Regex.Match(tableName, sPattern);
+                            modelName = m.Groups[1].Value;
+                            initflag = false;
+                        }
+                        <tr role="row" rel="@item.Id@tableName">
+                            <td class="details-control glyphicon glyphicon-plus"></td>
+                            <td>@Html.DisplayFor(modelItem => item.imte)</td>
+                            <td>@Html.DisplayFor(modelItem => item.SystemsDescription.Desc)</td>
+                            <td>@Html.DisplayFor(modelItem => item.DeploymentDate)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Location.Desc)</td>
+                            <td>@Html.DisplayFor(modelItem => item.ReferenceNo)</td>
+                            <td>
+                                <!--<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a> | -->
+                                <a href="#!" rel="@itemJs" onclick="editRecord(this, '@modelName')" class="editDialog">Edit</a> |
+                                <a href="#!" rel="@item.Id" onclick="deleteRecord(this, '@modelName')">Delete</a>
+                            </td>
+                        </tr>
+                    }
                 }
             </tbody>
         </table>

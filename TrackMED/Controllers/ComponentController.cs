@@ -129,7 +129,7 @@ namespace TrackMED.Controllers
                     break;
 
                 case "1": // overdue for maintenance or calibration
-                          //Components = Components.Where(s => ((DateTime.Now).Subtract((DateTime)s.MaintenanceDateTime)).Days > 30 || ((DateTime.Now).Subtract((DateTime)s.CalibrationDateTime)).Days > 30);
+                    //Components = Components.Where(s => ((DateTime.Now).Subtract((DateTime)s.MaintenanceDateTime)).Days > 30 || ((DateTime.Now).Subtract((DateTime)s.CalibrationDateTime)).Days > 30);
                     Components = Components.Where(s => (s.MaintenanceDate != null && ((DateTime.Now).Subtract((DateTime)s.MaintenanceDate)).Days > 30 ||
                                                         s.CalibrationDate != null && ((DateTime.Now).Subtract((DateTime)s.CalibrationDate)).Days > 30));
                     break;
@@ -137,6 +137,10 @@ namespace TrackMED.Controllers
                 case "2": // due for maintenance or calibration
                     Components = Components.Where(s => (s.CalibrationDate != null && ((DateTime)s.CalibrationDate).Subtract(DateTime.Now).Days <= 30 ||
                                                         s.MaintenanceDate != null && ((DateTime)s.MaintenanceDate).Subtract(DateTime.Now).Days <= 30));
+                    //Components = Components.Where(s => (s.MaintenanceDate != null && ((DateTime.Now).Subtract((DateTime)s.MaintenanceDate)).Days <= 30 &&
+                    //                                                                 ((DateTime.Now).Subtract((DateTime)s.MaintenanceDate)).Days > 0 ||
+                    //                                    s.CalibrationDate != null && ((DateTime.Now).Subtract((DateTime)s.CalibrationDate)).Days <= 30) &&
+                    //                                                                 ((DateTime.Now).Subtract((DateTime)s.CalibrationDate)).Days > 0);
                     break;
 
                 case "3": // due for calibration

@@ -8,6 +8,8 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using TrackMED.Models;
 using TrackMED.Services;
+using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace TrackMED.Controllers
 {
@@ -87,6 +89,7 @@ namespace TrackMED.Controllers
         }
 
         // GET: Entities/Edit/5
+        /*
         public async Task<ActionResult> Edit(string id)
         {
             if (id == null)
@@ -102,27 +105,26 @@ namespace TrackMED.Controllers
             }
             return View(Entity);
         }
-
+        */
         
         // POST: Entities/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, T Entity)
+        //[ValidateAntiForgeryToken]  A "Bad Request" error status is generated if this is uncommented
+        //public async Task<JsonResult> Edit(string id)  // Edit(string id, T Entity)
+        public async Task<IActionResult> Edit(T entity)  // Edit(string id, T Entity)
         {
-            var findRecord = await _entityService.GetEntityAsync(id);
-
-            if (findRecord == null)
-            {
-                return NotFound();
-            }
-
+            Debug.Assert(entity != null);
+            var findRecord = await _entityService.GetEntityAsync(entity.Id);
+ 
+            if (findRecord == null) return NotFound();
+            
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var res = await _entityService.EditEntityAsync(Entity);
+                    var res = await _entityService.EditEntityAsync(entity);
                 }
                 catch (Exception)
                 {
@@ -130,8 +132,31 @@ namespace TrackMED.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(Entity);
-        }       
+            return View(findRecord);
+        }
+
+        /* http://gunnarpeipman.com/2010/07/how-to-make-ajax-requests-to-asp-net-mvc-application-using-jquery/#ampshare=http://gunnarpeipman.com/2010/07/how-to-make-ajax-requests-to-asp-net-mvc-application-using-jquery/
+        public JsonResult ListCompanyNames(int id)
+        {
+            var party = _partyRepository.GetCompanyById(id);
+            var names = from n in party.Names
+                        select new
+                        {
+                            nameId = n.Id.ToString(),
+                            name = n.Name.ToString(),
+                            validTo = n.ValidTo.ToShortDateString(),
+                            userdata = ""
+                        };
+            var rows = names.ToArray();
+            var data = new JqGridData
+            {
+                total = rows.Count(),
+                page = 1,
+                records = rows.Count(),
+                rows = rows
+            };
+            return Json(data, JsonRequestBehavior.AllowGet);
+        }        */
 
         // GET: Entities/Delete/5
         public async Task<ActionResult> Delete(string id)
@@ -151,6 +176,7 @@ namespace TrackMED.Controllers
               If you are using jQuery $.ajax() to make Ajax calls to the controller action methods that are marked with [ValidateAntiForgeryToken] attribute
               it can create problems because $.ajax() won't pass the hidden form field and the cookie automatically as the classic form submission technique does.
         */
+
         public async Task<JsonResult> Remove(string id)
         {
             var rectodelete = await _entityService.GetEntityAsync(id);
@@ -168,6 +194,17 @@ namespace TrackMED.Controllers
             }
 
             return Json(new { Success = true, Status = "Completed Successfully" });
+        }
+
+        public async Task<IEnumerable<Component>> LoadComponents(string tableName, string descId)
+        {
+            List<Component> compRecords = await _componentService.GetSelectedEntitiesAsync(tableName, descId);
+
+            var items = compRecords
+                          .OrderBy(x => x.imte)
+                          .ToList();
+
+            return items;
         }
     }
 }

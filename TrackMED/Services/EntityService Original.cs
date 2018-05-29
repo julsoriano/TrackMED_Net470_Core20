@@ -2,14 +2,12 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Net.Http;  // From NuGet Package: Microsoft.AspNet.WebApi.Client 5.2.3. Supplies 'ReadAsAsync' method
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using TrackMED.Models;
-// using TrackMED.Extensions;
 
 namespace TrackMED.Services
 {
@@ -35,11 +33,9 @@ namespace TrackMED.Services
                 httpClient.DefaultRequestHeaders.Accept.Clear();
                 httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-                httpClient.Timeout = Timeout.InfiniteTimeSpan;
-
                 HttpResponseMessage response = await httpClient.GetAsync(uri, cancelToken);
                
-                string dataString = await response.Content.ReadAsStringAsync();
+                var dataString = response.Content.ReadAsStringAsync().Result;
                 List<T> objList = JsonConvert.DeserializeObject<List<T>>(dataString);
 
                 return objList;
@@ -65,18 +61,8 @@ namespace TrackMED.Services
 
         public async Task<List<T>> GetSelectedEntitiesAsync(string tableID, string id, CancellationToken cancelToken = default(CancellationToken))
         {
-            // See https://www.thomaslevesque.com/2018/02/25/better-timeout-handling-with-httpclient/
-            /*var handler = new TimeoutHandler
-            {
-                DefaultTimeout = TimeSpan.FromSeconds(100),
-                InnerHandler = new HttpClientHandler()
-            };
-            */
-
             // http://www.c-sharpcorner.com/UploadFile/2b481f/pass-multiple-parameter-in-url-in-web-api/
             uri = getServiceUri(typeof(T).Name + "/" + tableID + "/" + id);
-
-            //using (var cts = new CancellationTokenSource())
             using (HttpClient httpClient = new HttpClient())
             {
                 httpClient.DefaultRequestHeaders.Accept.Clear();
@@ -84,37 +70,10 @@ namespace TrackMED.Services
 
                 httpClient.Timeout = Timeout.InfiniteTimeSpan;
 
-                /*
-                var request = new HttpRequestMessage(HttpMethod.Get, uri);
-                List<T> objList = new List<T>();
-
-                while (true)
-                {
-                    try
-                    {
-                        using (HttpResponseMessage response = await httpClient.SendAsync(request, cts.Token))
-                        {
-                            // Console.WriteLine(response.StatusCode);
-                            var dataString = response.Content.ReadAsStringAsync().Result;
-                            objList = JsonConvert.DeserializeObject<List<T>>(dataString);
-                        }
-                    }
-                    catch (WebException e)
-                    {
-                        if (e.Status == WebExceptionStatus.Timeout)
-                        {
-                            // Handle timeout exception
-                            //await Task.Delay(2000, cts.Token);
-                            continue;
-                        }
-                        else throw;
-                    }
-                }
-                */ 
-                
                 HttpResponseMessage response = await httpClient.GetAsync(uri, cancelToken);
+                response.EnsureSuccessStatusCode();
 
-                string dataString = await response.Content.ReadAsStringAsync();
+                var dataString = response.Content.ReadAsStringAsync().Result;
                 List<T> objList = JsonConvert.DeserializeObject<List<T>>(dataString);
 
                 return objList;
@@ -128,7 +87,7 @@ namespace TrackMED.Services
             {
                 var response = await httpClient.GetAsync(uri, cancelToken);
 
-                string dataString = await response.Content.ReadAsStringAsync();
+                var dataString = response.Content.ReadAsStringAsync().Result;
                 T obj = JsonConvert.DeserializeObject<T>(dataString);
                 return obj;
             }

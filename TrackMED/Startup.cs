@@ -9,6 +9,8 @@ using Serilog.Sinks.Email;
 
 using System.Net;
 
+using TrackMED.Extensions;
+
 //using TrackMED.Data;
 using TrackMED.Models;
 using TrackMED.Services;
@@ -82,29 +84,8 @@ namespace TrackMED
             // See http://stackoverflow.com/questions/36893326/read-a-value-from-appsettings-json-in-1-0-0-rc1-final
             services.Configure<Settings>(Configuration.GetSection("MongoSettings"));
 
-            // Add application services.
-            services.AddTransient<IEmailSender, AuthMessageSender>();
-            services.AddTransient<ISmsSender, AuthMessageSender>();
+            services.RegisterServices();
 
-            // Add model services
-            services.AddSingleton<IEntityService<ActivityType>, EntityService<ActivityType>>();
-            services.AddSingleton<IEntityService<Category>, EntityService<Category>>();
-            services.AddSingleton<IEntityService<Classification>, EntityService<Classification>>();
-            services.AddSingleton<IEntityService<Component>, EntityService<Component>>();
-            services.AddSingleton<IEntityService<Deployment>, EntityService<Deployment>>();
-            services.AddSingleton<IEntityService<Description>, EntityService<Description>>();
-            services.AddSingleton<IEntityService<EquipmentActivity>, EntityService<EquipmentActivity>>();
-            services.AddSingleton<IEntityService<Event>, EntityService<Event>>();
-            services.AddSingleton<IEntityService<Location>, EntityService<Location>>();
-            services.AddSingleton<IEntityService<Manufacturer>, EntityService<Manufacturer>>();
-            services.AddSingleton<IEntityService<Model>, EntityService<Model>>();
-            services.AddSingleton<IEntityService<Model_Manufacturer>, EntityService<Model_Manufacturer>>();
-            services.AddSingleton<IEntityService<Owner>, EntityService<Owner>>();
-            services.AddSingleton<IEntityService<ProviderOfService>, EntityService<ProviderOfService>>();
-            services.AddSingleton<IEntityService<Status>, EntityService<Status>>();
-            services.AddSingleton<IEntityService<SystemsDescription>, EntityService<SystemsDescription>>();
-            services.AddSingleton<IEntityService<SystemTab>, EntityService<SystemTab>>();
-            
             /*
             var builder = new ContainerBuilder();
             builder.RegisterType<EntityService<Category>>()
