@@ -70,7 +70,7 @@ namespace TrackMED
                 .WriteTo.MongoDBCapped(uriMongoDB, collectionName: "logsTrackMED")  // https://github.com/serilog/serilog-sinks-mongodb
                 .CreateLogger();
 
-            Log.Warning("Houston we have a problem");
+            Log.Information("TrackMED_Net470_Core20 is launched");
         }
 
         public IConfigurationRoot Configuration { get; set; }

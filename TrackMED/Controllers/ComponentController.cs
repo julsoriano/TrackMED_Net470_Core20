@@ -99,8 +99,8 @@ namespace TrackMED.Controllers
         [HttpGet]
         public async Task<ActionResult> Index(string selectcomponents)
         {
-            _logger.LogInformation("Inside Components Controller: Just information");
-            _logger.LogWarning("Inside Components Controller: Warning message");
+            //_logger.LogInformation("Inside Components Controller: Just information");
+            //_logger.LogWarning("Inside Components Controller: Warning message");
 
             IList<SelectListItem> items = new List<SelectListItem>
             {
@@ -447,7 +447,7 @@ namespace TrackMED.Controllers
             {
                 sl.Insert(0, new SelectListItem { Value = "0", Text = "Please Select", Selected = true });
             }
-            ViewBag.ServiceProviderID = sl;
+            ViewBag.ProviderOfServiceID = sl;
 
             List<Model_Manufacturer> modelmanuRecords = await _modelmanufacturerService.GetEntitiesAsync();
             sl = new SelectList(modelmanuRecords.OrderBy(x => x.Desc), "Id", "Desc", Entity.Model_ManufacturerID).ToList();
@@ -473,7 +473,7 @@ namespace TrackMED.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(string id, [Bind("Id, assetnumber, imte, serialnumber, DescriptionID, OwnerID, ServiceProviderID, Model_ManufacturerID, StatusID, Notes, imteModule, CalibrationDate, CalibrationInterval, MaintenanceDate, MaintenanceInterval")]
+        public async Task<IActionResult> Edit(string id, [Bind("Id, assetnumber, imte, serialnumber, DescriptionID, OwnerID, ProviderOfServiceID, Model_ManufacturerID, StatusID, Notes, imteModule, CalibrationDate, CalibrationInterval, MaintenanceDate, MaintenanceInterval")]
                                          Component component)
         {
             var findRecord = await _entityService.GetEntityAsync(id);

@@ -165,7 +165,6 @@ $.fn.serializeObject = function () {
 
 // DELETE RECORD
 function deleteRecord(removethis, modelName) {
-    alert("here");
     var bgColor = $(removethis).closest('tr').css("background-color");
     var color = $(removethis).closest('tr').css("color");
 
@@ -208,8 +207,8 @@ function deleteRecord(removethis, modelName) {
 function deleteConfirmed(removethis, modelName, bgColor, color) {
     var value = $(removethis).attr('rel');     // or: var value = (removethis.id).substr(1);
     var url = "/" + modelName + "/Remove";
-    alert(value);
-    alert(url);
+    //alert(value);
+    //alert(url);
     // Send the data using post. See https://api.jquery.com/jquery.post/
     var posting = $.post(url, { id: value });
     /*  above is equivalent to:

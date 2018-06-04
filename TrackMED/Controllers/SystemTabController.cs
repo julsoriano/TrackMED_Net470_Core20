@@ -613,7 +613,7 @@ namespace TrackMED.Controllers
             return View(systemTab);
         }
 
-        /* Replaced by jQuery function "DeleteRecord"
+        //  Use this block if IT IS NECESSARY to list out system component before deleting record
         // POST: Systems/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -625,26 +625,45 @@ namespace TrackMED.Controllers
                 return NotFound();
             }
 
-            foreach (var lr in systemTab.leftComponents)
-            {
-                var imteToUpdate = await _componentService.GetEntityAsync(lr);
-                imteToUpdate.imteModule = null;
-                await _componentService.EditEntityAsync(imteToUpdate);
-            }
+            Status objStatus = null;
 
-            foreach (var lr in systemTab.rightComponents)
+            try
             {
-                var imteToUpdate = await _componentService.GetEntityAsync(lr);
-                imteToUpdate.imteModule = null;
-                await _componentService.EditEntityAsync(imteToUpdate);
+                foreach (var lr in systemTab.LeftComponents)
+                {
+                    var imteToUpdate = await _componentService.GetEntityAsync(lr);
+                    imteToUpdate.imteModule = null;
+                    objStatus = _statusService.GetEntityAsyncByDescription("Avail_PTS_Shelf").Result;
+                    // objStatus = _statusService.GetEntityAsyncByFieldID("Desc", "Avail_PTS_Shelf").Result;
+                    imteToUpdate.StatusID = objStatus != null ? (objStatus).Id : null;
+                    await _componentService.EditEntityAsync(imteToUpdate);
+                }
+
+                foreach (var lr in systemTab.RightComponents)
+                {
+                    var imteToUpdate = await _componentService.GetEntityAsync(lr);
+                    imteToUpdate.imteModule = null;
+                    objStatus = _statusService.GetEntityAsyncByDescription("Avail_PTS_Shelf").Result;
+                    // objStatus = _statusService.GetEntityAsyncByFieldID("Desc", "Avail_PTS_Shelf").Result;/
+                    imteToUpdate.StatusID = objStatus != null ? (objStatus).Id : null;
+                    await _componentService.EditEntityAsync(imteToUpdate);
+                }
+                await _entityService.DeleteEntityAsync(id);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("{0} Error in deleting record", ex.Message);
+                _logger.LogWarning("Error in deleting {0} record with id = {1}: " + ex.TargetSite.ToString(), "SystemTab", id);
+
+                return RedirectToAction("Index");
             }
 
             await _entityService.DeleteEntityAsync(id);
 
             return RedirectToAction("Index");
         }
-        */
 
+        /* Use this block if IT IS NOT NECESSARY to list out system component before deleting record
         // POST: Entities/Delete/5
         [HttpPost]
         //[ValidateAntiForgeryToken]
@@ -685,6 +704,7 @@ namespace TrackMED.Controllers
 
             return Json(new { Success = true, Status = "Completed Successfully" });
         }
+        */
 
         public async Task<IEnumerable<Deployment>> LoadDeployments(string descId)
         {
